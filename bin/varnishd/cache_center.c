@@ -21,7 +21,7 @@ void wk_debug(const char *format, ...)
 	struct timeval tv;
 	f = fopen(WK_DEBUG_LOG_FILE, "a+");
 	gettimeofday(&tv, NULL);
-	fprintf(f, "[ %lu-%lu (%d)] ", (unsigned long)tv.tv_sec, (unsigned long)tv.tv_usec, (int) getpid());
+	fprintf(f, "[ %lu-%lu (%d) ] ", (unsigned long)tv.tv_sec, (unsigned long)tv.tv_usec, (int) getpid());
 	va_start(args, format);
 	vfprintf(f, format, args);
 	fprintf(f, "\n");
