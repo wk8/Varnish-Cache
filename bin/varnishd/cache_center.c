@@ -354,6 +354,7 @@ cnt_done(struct sess *sp)
 	AZ(sp->vbc);
 	sp->director = NULL;
 	sp->restarts = 0;
+	SES_ClearReqBodyCache(sp);
 
 	sp->wrk->do_esi = 0;
 	sp->wrk->do_gunzip = 0;

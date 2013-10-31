@@ -308,3 +308,41 @@ SES_Init()
 	Lck_New(&stat_mtx, lck_stat);
 	Lck_New(&ses_mem_mtx, lck_sessmem);
 }
+
+/* Req Body Cache functions ------------------------------------------*/
+
+struct body_request_cache *new_request_body_cache(int content_length)
+{
+	struct body_request_cache *result;
+	result = (struct body_request_cache*) malloc(sizeof(struct body_request_cache));
+	if (!result) {
+		return NULL;
+	}
+	result->content = (char*) malloc(content_length);
+	if (!result->content) {
+		free(result);
+		return NULL;
+	}
+	result->length = 0;
+	return result;
+}
+
+void free_request_body_cache(struct body_request_cache * brq)
+{
+	if (brq) {
+		free(brq->content);
+		free(brq);
+	}
+}
+
+void SES_ClearReqBodyCache(struct sess *sp)
+{
+	free_request_body_cache(sp->request_body);
+}
+
+struct body_request_cache *SES_NewReqBosyCache(struct sess *sp, int content_length)
+{
+	// shouldn't be necessary, but let's just make sure
+	SES_ClearReqBodyCache(sp);
+	sp->request_body = new_request_body_cache(content_length);
+}

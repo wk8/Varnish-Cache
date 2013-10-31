@@ -519,7 +519,15 @@ struct object {
 
 };
 
-/* -------------------------------------------------------------------*/
+/* Body request cache structure ---------------------------------------*/
+
+struct body_request_cache
+{
+	unsigned		length;
+	char*		content;
+};
+
+/* Session structure --------------------------------------------------*/
 
 struct sess {
 	unsigned		magic;
@@ -552,6 +560,7 @@ struct sess {
 	const char		*doclose;
 	struct http		*http;
 	struct http		*http0;
+	struct body_request_cache	*request_body;
 
 	struct ws		ws[1];
 	char			*ws_ses;	/* WS above session data */
@@ -854,6 +863,8 @@ struct sess *SES_New(void);
 struct sess *SES_Alloc(void);
 void SES_Delete(struct sess *sp);
 void SES_Charge(struct sess *sp);
+void SES_ClearReqBodyCache(struct sess *sp);
+struct body_request_cache *SES_NewReqBosyCache(struct sess *sp, int content_length);
 
 /* cache_shmlog.c */
 void VSL_Init(void);
