@@ -311,7 +311,7 @@ SES_Init()
 
 /* Req Body Cache functions ------------------------------------------*/
 
-struct body_request_cache *new_request_body_cache(int content_length)
+struct body_request_cache *new_request_body_cache(unsigned long content_length)
 {
 	struct body_request_cache *result;
 	result = (struct body_request_cache*) malloc(sizeof(struct body_request_cache));
@@ -340,7 +340,7 @@ void SES_ClearReqBodyCache(struct sess *sp)
 	free_request_body_cache(sp->request_body);
 }
 
-struct body_request_cache *SES_NewReqBosyCache(struct sess *sp, int content_length)
+struct body_request_cache *SES_NewReqBosyCache(struct sess *sp, unsigned long content_length)
 {
 	// shouldn't be necessary, but let's just make sure
 	SES_ClearReqBodyCache(sp);
