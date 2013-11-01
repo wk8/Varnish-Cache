@@ -370,24 +370,49 @@ fetch_eof(struct sess *sp, struct http_conn *htc)
 int
 FetchReqBody(struct sess *sp)
 {
-	unsigned long content_length;
+	unsigned long content_length, current_content_length;
 	char buf[8192];
+	char cached_request;
 	char *ptr, *endp;
 	int rdcnt;
 
 	if (http_GetHdr(sp->http, H_Content_Length, &ptr)) {
-
 		content_length = strtoul(ptr, &endp, 10);
 		/* XXX should check result of conversion */
+		// create the body cache if needed
+		cached_request = sp->request_body != NULL;
+		if (cached_request) {
+			// then let's check it's the right size - better safe than sorry
+			if (sp->request_body->length != content_length) {
+				WSL(sp->wrk, SLT_Error, sp->fd, "Wrong size for the cached body request");
+				return (3);
+			}
+		} else if (content_length) {
+			sp->request_body = SES_NewReqBosyCache(sp, content_length);
+		}
+		current_content_length = 0;
 		while (content_length) {
 			if (content_length > sizeof buf)
 				rdcnt = sizeof buf;
 			else
 				rdcnt = content_length;
-			rdcnt = HTC_Read(sp->wrk, sp->htc, buf, rdcnt);
-			if (rdcnt <= 0)
-				return (1);
+			if (cached_request) {
+				// we've already cached that request's body,
+				// just replay it from the cache
+				memcpy(buf, sp->request_body->content + current_content_length, rdcnt);
+			} else {
+				// we need to read and cache the request body
+				rdcnt = HTC_Read(sp->wrk, sp->htc, buf, rdcnt);
+				if (rdcnt <= 0)
+					return (1);
+				// caching
+				if (sp->request_body) {
+					memcpy(sp->request_body->content + current_content_length, buf, rdcnt);
+					sp->request_body->length += rdcnt;
+				}
+			}
 			content_length -= rdcnt;
+			current_content_length += rdcnt;
 			if (!sp->sendbody)
 				continue;
 			(void)WRW_Write(sp->wrk, buf, rdcnt); /* XXX: stats ? */

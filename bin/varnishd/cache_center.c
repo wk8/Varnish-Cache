@@ -157,7 +157,6 @@ DOT }
 static int
 cnt_prepresp(struct sess *sp)
 {
-
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->obj, OBJECT_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->vcl, VCL_CONF_MAGIC);
@@ -270,9 +269,9 @@ DOT deliver -> DONE [style=bold,color=blue]
 static int
 cnt_deliver(struct sess *sp)
 {
-
 	sp->director = NULL;
 	sp->restarts = 0;
+	SES_ClearReqBodyCache(sp);
 
 	RES_WriteObj(sp);
 
@@ -314,6 +313,7 @@ cnt_done(struct sess *sp)
 	AZ(sp->vbc);
 	sp->director = NULL;
 	sp->restarts = 0;
+	SES_ClearReqBodyCache(sp);
 
 	sp->wrk->do_esi = 0;
 	sp->wrk->do_gunzip = 0;
@@ -950,6 +950,7 @@ cnt_streambody(struct sess *sp)
 	sp->wrk->acct_tmp.fetch++;
 	sp->director = NULL;
 	sp->restarts = 0;
+	SES_ClearReqBodyCache(sp);
 
 	RES_StreamEnd(sp);
 	if (sp->wrk->res_mode & RES_GUNZIP)
@@ -970,7 +971,6 @@ cnt_streambody(struct sess *sp)
 static int
 cnt_first(struct sess *sp)
 {
-
 	/*
 	 * XXX: If we don't have acceptfilters we are somewhat subject
 	 * XXX: to DoS'ing here.  One remedy would be to set a shorter
@@ -1016,7 +1016,6 @@ DOT hit -> prepresp [label="deliver",style=bold,color=green]
 static int
 cnt_hit(struct sess *sp)
 {
-
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->obj, OBJECT_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->vcl, VCL_CONF_MAGIC);
@@ -1195,7 +1194,6 @@ DOT
 static int
 cnt_miss(struct sess *sp)
 {
-
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->vcl, VCL_CONF_MAGIC);
 
@@ -1278,7 +1276,6 @@ DOT err_pass [label="ERROR",shape=plaintext]
 static int
 cnt_pass(struct sess *sp)
 {
-
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->vcl, VCL_CONF_MAGIC);
 	AZ(sp->obj);
@@ -1331,7 +1328,6 @@ DOT err_pipe [label="ERROR",shape=plaintext]
 static int
 cnt_pipe(struct sess *sp)
 {
-
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->vcl, VCL_CONF_MAGIC);
 
