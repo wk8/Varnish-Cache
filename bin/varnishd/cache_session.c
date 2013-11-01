@@ -315,29 +315,21 @@ SES_Init()
 struct body_request_cache *new_request_body_cache(unsigned long content_length)
 {
 	struct body_request_cache *result;
-	result = (struct body_request_cache*) malloc(sizeof(struct body_request_cache));
+	result = (struct body_request_cache*) malloc(sizeof(struct body_request_cache) + content_length);
 	if (!result) {
 		return NULL;
 	}
-	result->content = (char*) malloc(content_length);
-	if (!result->content) {
-		free(result);
-	}
+	result->content = (char*) ((char*) result + sizeof(struct body_request_cache));
 	result->length = 0;
 	return result;
 }
 
-void free_request_body_cache(struct body_request_cache * brq)
-{
-	if (brq) {
-		free(brq->content);
-		free(brq);
-	}
-}
-
 void SES_ClearReqBodyCache(struct sess *sp)
 {
-	free_request_body_cache(sp->request_body);
+	if (sp && sp->request_body) {
+		free(sp->request_body);
+		sp->request_body = NULL;
+	}
 }
 
 struct body_request_cache *SES_NewReqBosyCache(struct sess *sp, unsigned long content_length)
