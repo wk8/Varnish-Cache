@@ -278,6 +278,7 @@ SES_Delete(struct sess *sp)
 		VTAILQ_INSERT_HEAD(&ses_free_mem[1 - ses_qp], sm, list);
 		Lck_Unlock(&ses_mem_mtx);
 	}
+	SES_ClearReqBodyCache(sp);
 
 	/* Update statistics */
 	Lck_Lock(&stat_mtx);
@@ -313,16 +314,14 @@ SES_Init()
 
 struct body_request_cache *new_request_body_cache(unsigned long content_length)
 {
+	unsigned char *p;
 	struct body_request_cache *result;
-	result = (struct body_request_cache*) malloc(sizeof(struct body_request_cache));
-	if (!result) {
+	p = malloc(sizeof(struct body_request_cache) + content_length);
+	if (!p) {
 		return NULL;
 	}
-	result->content = (char*) malloc(content_length);
-	if (!result->content) {
-		free(result);
-		return NULL;
-	}
+	result = (struct body_request_cache*) p;
+	result->content = (char*) p + sizeof(result);
 	result->length = 0;
 	return result;
 }

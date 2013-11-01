@@ -312,6 +312,7 @@ cnt_deliver(struct sess *sp)
 	WK_DEBUG("Entering cnt_deliver");
 	sp->director = NULL;
 	sp->restarts = 0;
+	SES_ClearReqBodyCache(sp);
 
 	RES_WriteObj(sp);
 
@@ -995,6 +996,7 @@ cnt_streambody(struct sess *sp)
 	sp->wrk->acct_tmp.fetch++;
 	sp->director = NULL;
 	sp->restarts = 0;
+	SES_ClearReqBodyCache(sp);
 
 	RES_StreamEnd(sp);
 	if (sp->wrk->res_mode & RES_GUNZIP)
