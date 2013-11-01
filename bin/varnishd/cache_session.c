@@ -314,14 +314,15 @@ SES_Init()
 
 struct body_request_cache *new_request_body_cache(unsigned long content_length)
 {
-	unsigned char *p;
 	struct body_request_cache *result;
-	p = malloc(sizeof(struct body_request_cache) + content_length);
-	if (!p) {
+	result = (struct body_request_cache*) malloc(sizeof(struct body_request_cache));
+	if (!result) {
 		return NULL;
 	}
-	result = (struct body_request_cache*) p;
-	result->content = (char*) p + sizeof(result);
+	result->content = (char*) malloc(content_length);
+	if (!result->content) {
+		free(result);
+	}
 	result->length = 0;
 	return result;
 }
