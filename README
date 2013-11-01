@@ -1,10 +1,13 @@
-This is Varnish Cache, the high-performance HTTP accelerator.
+This a slightly modified version of Varnish Cache, the high-performance HTTP accelerator.
 
-Documentation and additional information about Varnish is available on
-http://www.varnish-cache.org/
+I've added the ability for Varnish to replay the requests' bodies' contents when restarting a request in `pass` mode (see the description of the Varnish limitation I've addressed here at https://www.varnish-cache.org/trac/ticket/652).
 
-Technical questions about Varnish and this release should be addressed
-to <varnish-misc@varnish-cache.org>.
+It is based off the 3.0.4 version of Varnish. You can easily review the changes I've made at https://github.com/wk8/Varnish-Cache/compare/9f83e8fdbd2a54047e4fa909758260db59a5e4b6...master?expand=1
 
-Questions about commercial support and services related to Varnish
-should be addressed to <sales@varnish-software.com>.
+To install: git clone, then cd to the repo directory, and run
+
+./autogen.sh && ./configure --prefix=/usr && make && sudo make install && sudo service varnish restart && echo "Done"
+
+This custom version of Varnish is currently used in production. Questions and suggestions welcome at <wk8.github@gmail.com>.
+
+Documentation and additional information about the vanilla Varnish is available on http://www.varnish-cache.org/
