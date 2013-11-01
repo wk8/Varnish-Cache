@@ -86,7 +86,6 @@ static unsigned xids;
 static int
 cnt_wait(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_wait");
 	int i;
 	struct pollfd pfd[1];
 
@@ -158,7 +157,6 @@ DOT }
 static int
 cnt_prepresp(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_prepresp");
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->obj, OBJECT_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->vcl, VCL_CONF_MAGIC);
@@ -271,7 +269,6 @@ DOT deliver -> DONE [style=bold,color=blue]
 static int
 cnt_deliver(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_deliver");
 	sp->director = NULL;
 	sp->restarts = 0;
 	SES_ClearReqBodyCache(sp);
@@ -306,7 +303,6 @@ DOT	]
 static int
 cnt_done(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_done");
 	double dh, dp, da;
 	int i;
 
@@ -429,7 +425,6 @@ DOT rsterr [label="RESTART",shape=plaintext]
 static int
 cnt_error(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_error");
 	struct worker *w;
 	struct http *h;
 	char date[40];
@@ -542,7 +537,6 @@ DOT errfetch [label="ERROR",shape=plaintext]
 static int
 cnt_fetch(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_fetch");
 	int i;
 
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
@@ -672,7 +666,6 @@ DOT fetchbody2 -> prepresp [style=bold,color=blue]
 static int
 cnt_fetchbody(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_fetchbody");
 	int i;
 	struct http *hp, *hp2;
 	char *b;
@@ -916,7 +909,6 @@ DOT streambody -> DONE [style=bold,color=cyan]
 static int
 cnt_streambody(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_streambody");
 	int i;
 	struct stream_ctx sctx;
 	uint8_t obuf[sp->wrk->res_mode & RES_GUNZIP ?
@@ -979,7 +971,6 @@ cnt_streambody(struct sess *sp)
 static int
 cnt_first(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_first");
 	/*
 	 * XXX: If we don't have acceptfilters we are somewhat subject
 	 * XXX: to DoS'ing here.  One remedy would be to set a shorter
@@ -1025,7 +1016,6 @@ DOT hit -> prepresp [label="deliver",style=bold,color=green]
 static int
 cnt_hit(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_hit");
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->obj, OBJECT_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->vcl, VCL_CONF_MAGIC);
@@ -1097,7 +1087,6 @@ DOT lookup -> miss [label="no",style=bold,color=blue]
 static int
 cnt_lookup(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_lookup");
 	struct objcore *oc;
 	struct object *o;
 	struct objhead *oh;
@@ -1205,7 +1194,6 @@ DOT
 static int
 cnt_miss(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_miss");
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->vcl, VCL_CONF_MAGIC);
 
@@ -1288,7 +1276,6 @@ DOT err_pass [label="ERROR",shape=plaintext]
 static int
 cnt_pass(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_pass");
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->vcl, VCL_CONF_MAGIC);
 	AZ(sp->obj);
@@ -1341,7 +1328,6 @@ DOT err_pipe [label="ERROR",shape=plaintext]
 static int
 cnt_pipe(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_pipe");
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
 	CHECK_OBJ_NOTNULL(sp->vcl, VCL_CONF_MAGIC);
 
@@ -1384,7 +1370,6 @@ DOT recv -> hash [label="lookup",style=bold,color=green]
 static int
 cnt_recv(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_recv");
 	unsigned recv_handling;
 
 	CHECK_OBJ_NOTNULL(sp, SESS_MAGIC);
@@ -1482,7 +1467,6 @@ DOT start -> recv [style=bold,color=green]
 static int
 cnt_start(struct sess *sp)
 {
-	WK_DEBUG("Entering cnt_start");
 	uint16_t done;
 	char *p;
 	const char *r = "HTTP/1.1 100 Continue\r\n\r\n";
@@ -1581,7 +1565,6 @@ cnt_diag(struct sess *sp, const char *state)
 void
 CNT_Session(struct sess *sp)
 {
-	WK_DEBUG("Starting CNT_Session");
 	int done;
 	struct worker *w;
 

@@ -370,7 +370,6 @@ fetch_eof(struct sess *sp, struct http_conn *htc)
 int
 FetchReqBody(struct sess *sp)
 {
-	WK_DEBUG("Entering FetchReqBody");
 	unsigned long content_length, current_content_length;
 	char buf[8192];
 	char cached_request;
@@ -442,7 +441,6 @@ FetchReqBody(struct sess *sp)
 int
 FetchHdr(struct sess *sp)
 {
-	WK_DEBUG("Entering FetchHdr");
 	struct vbc *vc;
 	struct worker *w;
 	char *b;
@@ -487,7 +485,6 @@ FetchHdr(struct sess *sp)
 
 	/* Deal with any message-body the request might have */
 	i = FetchReqBody(sp);
-	WK_DEBUG("Result from FetchReqBody: %d", i);
 	if (WRW_FlushRelease(w) || i > 0) {
 		WSP(sp, SLT_FetchError, "backend write error: %d (%s)",
 		    errno, strerror(errno));
@@ -550,7 +547,6 @@ FetchHdr(struct sess *sp)
 int
 FetchBody(struct sess *sp)
 {
-	WK_DEBUG("Entering FetchBody");
 	int cls;
 	struct storage *st;
 	struct worker *w;
