@@ -1635,6 +1635,7 @@ CNT_Session(struct sess *sp)
 		WS_Assert(w->ws);
 		CHECK_OBJ_ORNULL(w->nobjhead, OBJHEAD_MAGIC);
 	}
+	SES_ClearReqBodyCache(sp);
 	WSL_Flush(w, 0);
 	AZ(w->do_stream);
 	AZ(w->is_gzip);

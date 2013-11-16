@@ -219,6 +219,8 @@ SES_New(void)
 	/* Only updated from the cache acceptor - no lock needed */
 	n_sess_grab++;
 
+    SES_ClearReqBodyCache(sp);
+
 	return (sp);
 }
 
