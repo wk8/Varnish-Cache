@@ -1230,6 +1230,7 @@ cnt_miss(struct sess *sp)
 		sp->step = STP_PASS;
 		return (0);
 	case VCL_RET_FETCH:
+		sp->sendbody = 1;
 		sp->step = STP_FETCH;
 		return (0);
 	case VCL_RET_RESTART:
