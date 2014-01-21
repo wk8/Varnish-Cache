@@ -334,7 +334,7 @@ void SES_ClearReqBodyCache(struct sess *sp)
 	}
 }
 
-struct body_request_cache *SES_NewReqBosyCache(struct sess *sp, unsigned long content_length)
+struct body_request_cache *SES_NewReqBodyCache(struct sess *sp, unsigned long content_length)
 {
 	// shouldn't be necessary, but let's just make sure
 	SES_ClearReqBodyCache(sp);

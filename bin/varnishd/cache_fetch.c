@@ -388,7 +388,7 @@ FetchReqBody(struct sess *sp)
 				return (3);
 			}
 		} else if (content_length) {
-			sp->request_body = SES_NewReqBosyCache(sp, content_length);
+			sp->request_body = SES_NewReqBodyCache(sp, content_length);
 		}
 		current_content_length = 0;
 		while (content_length) {

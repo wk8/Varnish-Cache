@@ -864,7 +864,7 @@ struct sess *SES_Alloc(void);
 void SES_Delete(struct sess *sp);
 void SES_Charge(struct sess *sp);
 void SES_ClearReqBodyCache(struct sess *sp);
-struct body_request_cache *SES_NewReqBosyCache(struct sess *sp, unsigned long content_length);
+struct body_request_cache *SES_NewReqBodyCache(struct sess *sp, unsigned long content_length);
 
 /* cache_shmlog.c */
 void VSL_Init(void);
